@@ -27,12 +27,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import PersonSerializer
-from pymongo import MongoClient
 
-# MongoDB Connection
-client = MongoClient("mongodb://localhost:27017/")
-db = client['mydatabase']
-person_collection = db['persons']
+from .db_connection import person_collection 
+
+
+class personAp(APIView):
+
+    def get_person(self,request):
+        person = list(person_collection.find({},{"id":0}))
+        return Response({"person":person},status=status.HTTP_200_OK)
 
 class PersonAPI(APIView):
 
